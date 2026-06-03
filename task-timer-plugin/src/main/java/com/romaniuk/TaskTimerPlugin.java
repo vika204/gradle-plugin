@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * A Gradle plugin that tracks the execution time of tasks and generates a performance report.
+ */
 public class TaskTimerPlugin implements Plugin<Project> {
 
     static Map<String, Long> taskTimes = new HashMap<>();
@@ -38,6 +41,10 @@ public class TaskTimerPlugin implements Plugin<Project> {
             }
         });
 
+        /**
+         * Registers a task to generate a performance report after all tasks have been executed.
+         * The report includes the name and duration of each task, and is saved to a file in the build directory.
+         */
         project.getTasks().register("generatePerformanceReport", Task.class, task -> {
             task.setGroup("reporting");
             task.setDescription("Generates a performance report from task execution times.");
@@ -67,6 +74,10 @@ public class TaskTimerPlugin implements Plugin<Project> {
             });
         });
 
+        /**
+         * Registers a task to verify that no task exceeded a 5-second time limit.
+         * This task runs after the performance report is generated and logs any tasks that exceeded the limit.
+         */
         project.getTasks().register("verifyTimeLimits", Task.class, task -> {
             task.setGroup("reporting");
             task.setDescription("Verifies that no task exceeded the 5-second time limit.");
